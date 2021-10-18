@@ -12,7 +12,7 @@ function App() {
           <Route path="/" exact>
             <Redirect to="/quotes"/>
           </Route>
-          <Route path="/quotes" component={AllQuotesComponent}>
+          <Route path="/quotes" exact component={AllQuotesComponent}>
           </Route>
           <Route path="/quotes/:quoteId" component={QuoteDetailsComponent}>
           </Route>
