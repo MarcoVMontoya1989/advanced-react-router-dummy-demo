@@ -15,18 +15,20 @@ const QuoteDetailsComponent = () => {
     return (<span>There is no quotes</span>);
   }
 
+  console.log(matchUrl.path);
+
   return (
     <Fragment>
       <HighlightedQuote data={quote} />
-      <Route path={`/quotes/${params.quoteId}`} exact>
+      <Route path={matchUrl.path} exact>
         <div className="centered">
           <Link className='btn--flat'
-                to={`/quotes/${params.quoteId}/comments`}>
+                to={`${matchUrl.url}/comments`}>
             Load Comments
           </Link>
         </div>
       </Route>
-      <Route path={`/quotes/${params.quoteId}/comments`}
+      <Route path={`${matchUrl.path}/comments`}
              component={Comments}>
       </Route>
     </Fragment>
