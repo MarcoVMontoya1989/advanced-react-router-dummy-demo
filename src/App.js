@@ -4,6 +4,7 @@ import AllQuotesComponent from "./components/Pages/AllQuotes.component";
 import QuoteDetailsComponent from "./components/Pages/QuoteDetails.component";
 import NewQuotesComponent from "./components/Pages/NewQuotes.component";
 import LayoutComponent from "./components/layout/Layout.component";
+import NotFoundComponent from "./components/Pages/NotFound.component";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="/quotes/:quoteId" component={QuoteDetailsComponent}>
         </Route>
         <Route path="/new-quote" component={NewQuotesComponent}>
+        </Route>
+        <Route path={'*'} component={NotFoundComponent}>
         </Route>
       </Switch>
     </LayoutComponent>

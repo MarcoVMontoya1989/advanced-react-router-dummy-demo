@@ -9,12 +9,16 @@ const QuoteDetailsComponent = () => {
 
   const params = useParams();
 
-  const quote = DUMMY_QUOTES.find(quote => quote.id === params.quoteId);
+  let quote = DUMMY_QUOTES.find(quote => quote.id === params.quoteId);
+
+  if (!quote) {
+    return (<span>There is no quotes</span>);
+  }
 
   return (
     <Fragment>
-      {/*<h1>quote details</h1>*/}
-      {/*<p>{params.quoteId}</p>*/}
+      <h1>quote details</h1>
+      <p>{params.quoteId}</p>
       <HighlightedQuote data={quote} />
       <Route path={`/quotes/${params.quoteId}/comments`}
              component={Comments}>
