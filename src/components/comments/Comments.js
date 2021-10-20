@@ -1,54 +1,53 @@
-import {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+
 import classes from './Comments.module.css';
 import NewCommentForm from './NewCommentForm';
-import useHttp from "../../hooks/use-http";
-import {getAllComments} from "../../lib/api";
-import LoadingSpinner from "../UI/LoadingSpinner";
-import CommentsList from "./CommentsList";
+import useHttp from '../../hooks/use-http';
+import { getAllComments } from '../../lib/api';
+import LoadingSpinner from '../UI/LoadingSpinner';
+import CommentsList from './CommentsList';
 
-const CommentsComponent = () => {
+const Comments = () => {
   const [isAddingComment, setIsAddingComment] = useState(false);
   const params = useParams();
-  const {quoteId} = params;
 
-  let comments;
+  const { quoteId } = params;
 
-  const {sendRequest, status, data: loadedQuote, error} = useHttp(getAllComments);
+  const { sendRequest, status, data: loadedComments } = useHttp(getAllComments);
 
   useEffect(() => {
     sendRequest(quoteId);
-  }, [sendRequest, quoteId, error])
+  }, [quoteId, sendRequest]);
 
   const startAddCommentHandler = () => {
     setIsAddingComment(true);
   };
 
+  const addedCommentHandler = useCallback(() => {
+    sendRequest(quoteId);
+  }, [sendRequest, quoteId]);
+
+  let comments;
+
   if (status === 'pending') {
     comments = (
-      <div className={'centered'}>
+      <div className='centered'>
         <LoadingSpinner />
       </div>
     );
   }
 
-// && loadedQuote.length > 0
-  if (status === 'completed') {
-    console.log(loadedQuote);
-    comments = <CommentsList comments={loadedQuote} />
+  if (status === 'completed' && loadedComments && loadedComments.length > 0) {
+    comments = <CommentsList comments={loadedComments} />;
   }
 
-  console.log('comments test', loadedQuote);
-
-  if (status === 'completed') {
-    comments = (
-      <p className={'centered'}>
-        No comments added yet!
-      </p>
-    )
+  if (
+    status === 'completed' &&
+    (!loadedComments || loadedComments.length === 0)
+  ) {
+    comments = <p className='centered'>No comments were added yet!</p>;
   }
-
-
 
   return (
     <section className={classes.comments}>
@@ -58,16 +57,15 @@ const CommentsComponent = () => {
           Add a Comment
         </button>
       )}
-      {
-        isAddingComment &&
+      {isAddingComment && (
         <NewCommentForm
-          onAddedComment={startAddCommentHandler}
           quoteId={quoteId}
+          onAddedComment={addedCommentHandler}
         />
-      }
+      )}
       {comments}
     </section>
   );
 };
 
-export default CommentsComponent;
+export default Comments;
